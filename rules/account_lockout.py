@@ -1,43 +1,15 @@
-"""
-rules/account_lockout.py
-=========================
-Detects account lockout events and correlates them with
-preceding brute force activity.
 
-MITRE ATT&CK: T1110.001 — Brute Force: Password Guessing
-
-Windows Event IDs:
-  4740 — A user account was locked out
-  4767 — A user account was unlocked
-
-Linux events:
-  LINUX_ACCOUNT_LOCKED — PAM lockout (pam_tally, pam_faillock)
-
-Each finding:
-  {
-    "rule"         : "Account Lockout",
-    "mitre"        : "T1110.001",
-    "username"     : locked account,
-    "computer"     : hostname,
-    "timestamp"    : when locked,
-    "lockout_count": how many times this account was locked,
-    "detail"       : description,
-    "severity"     : "High" | "Medium",
-    "events"       : list of raw event dicts
-  }
-"""
 
 from collections import defaultdict
 from colorama import Fore
 
 
 LOCKOUT_IDS = {
-    4740,                    # Windows: account locked out
-    "LINUX_ACCOUNT_LOCKED",  # Linux: PAM lockout
-}
+    4740,                    
+    "LINUX_ACCOUNT_LOCKED",  
 
 UNLOCK_IDS = {
-    4767,                    # Windows: account unlocked
+    4767,                    
 }
 
 
@@ -45,18 +17,7 @@ def detect_account_lockout(
     events  : list,
     verbose : bool = False,
 ) -> list:
-    """
-    Scan all events for account lockout patterns.
-
-    Parameters
-    ----------
-    events  : list of normalised event dicts
-    verbose : bool
-
-    Returns
-    -------
-    list of finding dicts
-    """
+    
     findings = []
 
     # Group lockout events by username
