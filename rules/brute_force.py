@@ -1,37 +1,4 @@
-"""
-rules/brute_force.py
-=====================
-Detects brute force / password spray attacks.
 
-MITRE ATT&CK: T1110 — Brute Force
-
-Logic:
-  Group all failed login events by (source_ip, username) pair.
-  If a source IP exceeds the threshold number of failures
-  within the time window → raise a brute force alert.
-
-  Also detects:
-  - Username enumeration (many different usernames from one IP)
-  - Distributed brute force (same username from many IPs)
-
-Windows Event IDs: 4625 (failed logon)
-Linux events    : LINUX_FAILED_LOGIN, LINUX_INVALID_USER
-
-Each finding returned:
-  {
-    "rule"       : "Brute Force",
-    "mitre"      : "T1110",
-    "source_ip"  : attacker IP,
-    "username"   : targeted account,
-    "count"      : number of failures,
-    "first_seen" : datetime,
-    "last_seen"  : datetime,
-    "os_source"  : "windows" | "linux" | "both",
-    "events"     : list of raw event dicts,
-    "severity"   : "Critical" | "High" | "Medium",
-    "detail"     : description string
-  }
-"""
 
 from collections import defaultdict
 from datetime import timedelta
