@@ -69,19 +69,7 @@ def build_alerts(
     pe_findings : list,
     al_findings : list,
 ) -> list:
-    """
-    Merge all findings into a single sorted alert list.
-
-    Parameters
-    ----------
-    bf_findings : brute force findings
-    pe_findings : privilege escalation findings
-    al_findings : account lockout findings
-
-    Returns
-    -------
-    list of alert dicts sorted by severity (Critical → Low)
-    """
+    
     alerts = []
 
     for f in bf_findings:
