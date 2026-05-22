@@ -1,37 +1,4 @@
-"""
-rules/privilege_escalation.py
-==============================
-Detects privilege escalation attempts and successes.
 
-MITRE ATT&CK:
-  T1078   — Valid Accounts (special privilege logon)
-  T1548.003 — Abuse Elevation Control (sudo abuse)
-  T1543   — Create or Modify System Process (new service/task)
-
-Windows patterns:
-  4672 — Special privileges assigned to new logon
-         (SeDebugPrivilege, SeTcbPrivilege, SeLoadDriverPrivilege etc.)
-  4698 — Scheduled task created (persistence + priv esc vector)
-  7045 — New service installed
-  4756 — Member added to privileged group
-
-Linux patterns:
-  LINUX_SUDO_COMMAND — sudo used (especially for sensitive commands)
-  LINUX_SU_SUCCESS   — successful su to root or other account
-  LINUX_SESSION_OPEN — root session opened
-
-Each finding:
-  {
-    "rule"      : rule name,
-    "mitre"     : technique ID,
-    "username"  : who escalated,
-    "computer"  : on which host,
-    "timestamp" : when,
-    "detail"    : what happened,
-    "severity"  : "Critical" | "High" | "Medium" | "Low",
-    "events"    : list of raw event dicts
-  }
-"""
 
 from colorama import Fore
 
