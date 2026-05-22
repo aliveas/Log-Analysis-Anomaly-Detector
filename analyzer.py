@@ -1,16 +1,3 @@
-"""
-Log Analysis & Anomaly Detector
-================================
-Main CLI entry point — parses Windows Event Logs and Linux syslogs,
-runs all three detection rules, and generates an HTML alert dashboard.
-
-Usage:
-    python analyzer.py --windows windows_events.xml
-    python analyzer.py --linux   linux_auth.log
-    python analyzer.py --windows windows_events.xml --linux linux_auth.log
-    python analyzer.py --windows windows_events.xml --output my_report.html --verbose
-"""
-
 import argparse
 import datetime
 import os
@@ -30,10 +17,6 @@ from report.generator            import generate_report
 init(autoreset=True)
 
 
-# ─────────────────────────────────────────────
-# Banner
-# ─────────────────────────────────────────────
-
 def print_banner():
     print(f"""
 {Fore.CYAN}+------------------------------------------------------+
@@ -43,9 +26,6 @@ def print_banner():
 """)
 
 
-# ─────────────────────────────────────────────
-# Argument parser
-# ─────────────────────────────────────────────
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -78,9 +58,7 @@ def parse_args():
     return parser.parse_args()
 
 
-# ─────────────────────────────────────────────
-# Section printer
-# ─────────────────────────────────────────────
+
 
 def section(title: str, color=Fore.CYAN):
     print(f"\n{color}{'-' * 54}")
@@ -88,9 +66,7 @@ def section(title: str, color=Fore.CYAN):
     print(f"{'-' * 54}{Style.RESET_ALL}")
 
 
-# ─────────────────────────────────────────────
-# Print alert summary to terminal
-# ─────────────────────────────────────────────
+
 
 def print_alerts(alerts: list):
     if not alerts:
@@ -105,9 +81,6 @@ def print_alerts(alerts: list):
         print(f"           Source: {alert['source']} | Count: {alert['count']}")
 
 
-# ─────────────────────────────────────────────
-# Main
-# ─────────────────────────────────────────────
 
 def main():
     print_banner()
@@ -126,9 +99,7 @@ def main():
 
     all_events = []
 
-    # ══════════════════════════════════════════
-    # STEP 1 — Parse Windows logs
-    # ══════════════════════════════════════════
+ 
     windows_events = []
     if args.windows:
         section("STEP 1 - Parsing Windows Event Logs")
@@ -141,9 +112,6 @@ def main():
             print(f"{Fore.GREEN}[+] Parsed {len(windows_events)} Windows events")
             all_events.extend(windows_events)
 
-    # ══════════════════════════════════════════
-    # STEP 2 — Parse Linux logs
-    # ══════════════════════════════════════════
     linux_events = []
     if args.linux:
         section("STEP 2 - Parsing Linux Auth Logs")
@@ -162,9 +130,7 @@ def main():
 
     print(f"\n{Fore.CYAN}[*] Total events to analyse: {len(all_events)}")
 
-    # ══════════════════════════════════════════
-    # STEP 3 — Run detection rules
-    # ══════════════════════════════════════════
+  
     section("STEP 3 - Running Detection Rules")
 
     print(f"{Fore.CYAN}  [*] Rule 1 - Brute Force / Failed Logins (MITRE T1110)")
@@ -188,17 +154,13 @@ def main():
     )
     print(f"{Fore.GREEN}      Found: {len(al_findings)} finding(s)")
 
-    # ══════════════════════════════════════════
-    # STEP 4 — Build alerts
-    # ══════════════════════════════════════════
+   
     section("STEP 4 - Building Alert Summary")
     alerts = build_alerts(bf_findings, pe_findings, al_findings)
 
     print_alerts(alerts)
 
-    # ══════════════════════════════════════════
-    # STEP 5 — Generate report
-    # ══════════════════════════════════════════
+  
     section("STEP 5 - Generating HTML Report", Fore.GREEN)
     os.makedirs("output", exist_ok=True)
     output_path = os.path.join("output", args.output)
